@@ -75,8 +75,9 @@ class HelpdeskApp extends StatelessWidget {
 
 // -- ROUTING --
 final GoRouter _router = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/',
   routes: [
+    GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     ShellRoute(
       builder: (context, state, child) => MainScaffold(child: child),
@@ -186,6 +187,48 @@ class CustomBadge extends StatelessWidget {
   }
 }
 
+// -- SCREEN: SPLASH --
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Pindah ke halaman login setelah 2.5 detik
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted) context.go('/login');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: primaryBlue,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 96, height: 96,
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(24)),
+              child: const Center(child: Text('E', style: TextStyle(color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold))),
+            ),
+            const SizedBox(height: 32),
+            const Text('E-Ticketing', style: TextStyle(color: Colors.white, fontSize: 26, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Text('Helpdesk Mobile', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 16)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // -- SCREEN: LOGIN --
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -251,7 +294,7 @@ class LoginScreen extends StatelessWidget {
                       TextField(
                         obscureText: true,
                         decoration: InputDecoration(
-                          hintText: '��������',
+                          hintText: 'masukkan password',
                           filled: true,
                           fillColor: isDark ? cardDark : Colors.grey.shade100,
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
